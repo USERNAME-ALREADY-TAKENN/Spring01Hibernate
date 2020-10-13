@@ -11,4 +11,5 @@ public interface BookService {
     public void delete (Book book);
     public List<Book> findAll();
     public List<Book> findAllWithPublisher();
+    public List<Book> getRatingList(int rating);
 }

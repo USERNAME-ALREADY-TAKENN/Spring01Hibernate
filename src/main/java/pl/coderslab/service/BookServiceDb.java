@@ -42,4 +42,9 @@ public class BookServiceDb implements BookService {
     public List<Book> findAllWithPublisher() {
         return this.bookDao.findAllWithPublisher();
     }
+
+    @Override
+    public List<Book> getRatingList(int rating) {
+        return this.bookDao.getRatingList(rating);
+    }
 }

@@ -16,7 +16,10 @@
     <ul>
         <c:forEach items="${books}" var="book">
             <li><h3>${book.title}</h3>
-            ${book.publisher.name}</li>
+                <span>Wydawca: ${book.publisher.name}</span><br>
+                <span>Ocena: ${book.rating}/10</span><br>
+                <span>Opis: ${book.description}</span>
+            </li>
         </c:forEach>
     </ul>
 </body>

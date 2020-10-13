@@ -38,4 +38,11 @@ public class BookDao {
         List<Book> books = query.getResultList();
         return books;
     }
+
+    public List<Book> getRatingList(int rating) {
+        Query query = this.em.createQuery("Select b from Book b where b.rating = :rating");
+        query.setParameter("rating", rating);
+        List<Book> books = query.getResultList();
+        return books;
+    }
 }
