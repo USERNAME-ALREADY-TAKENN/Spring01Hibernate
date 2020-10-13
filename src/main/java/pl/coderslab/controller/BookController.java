@@ -1,6 +1,7 @@
 package pl.coderslab.controller;
 
 import com.github.javafaker.Faker;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,12 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
+import pl.coderslab.service.AuthorService;
 import pl.coderslab.service.BookService;
 import pl.coderslab.service.PublisherService;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Random;
 
@@ -23,12 +27,14 @@ public class BookController {
 
     private BookService bookService;
     private PublisherService publisherService;
+    private AuthorService authorService;
     private Faker faker;
 
     @Autowired
-    public BookController(BookService bookService, PublisherService publisherService) {
+    public BookController(BookService bookService, PublisherService publisherService, AuthorService authorService) {
         this.bookService = bookService;
         this.publisherService = publisherService;
+        this.authorService = authorService;
         this.faker = new Faker();
     }
     @RequestMapping("/add")
@@ -50,8 +56,10 @@ public class BookController {
     }
 
     @GetMapping()
+    @Transactional
     public String allBooks(Model model){
-        List<Book> bookList = this.bookService.findAllWithPublisher();
+        List<Book> bookList = this.bookService.findAll();
+//        bookList.forEach(b -> Hibernate.initialize(b.getAuthors()));
         model.addAttribute("books", bookList);
         return "book/list";
     }
@@ -61,7 +69,27 @@ public class BookController {
         model.addAttribute("books", bookList);
         return "book/list";
     }
-
+    @GetMapping("/publisherId/{publisherId}")
+    public String allBooksByPublisherId(Model model, @PathVariable long publisherId){
+        Publisher publisher = publisherService.findOneById(publisherId);
+        List<Book> bookList = this.bookService.findAllWithThisPublisher(publisher);
+        model.addAttribute("books", bookList);
+        return "book/list";
+    }
+    @GetMapping("/publisherName/{publisherName}")
+    public String allBooksByPublisherName(Model model, @PathVariable String publisherName){
+        Publisher publisher = publisherService.findOneByName(publisherName);
+        List<Book> bookList = this.bookService.findAllWithThisPublisher(publisher);
+        model.addAttribute("books", bookList);
+        return "book/list";
+    }
+    @GetMapping("/author/{authorId}")
+    public String allBooksByAuthor(Model model, @PathVariable long authorId){
+        Author author = authorService.findOneById(authorId);
+        List<Book> bookList = this.bookService.findAllWithThisAuthor(author);
+        model.addAttribute("books", bookList);
+        return "book/list";
+    }
 
 
 

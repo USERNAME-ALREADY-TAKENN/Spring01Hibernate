@@ -1,5 +1,6 @@
 package pl.coderslab.service;
 
+import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
 
 public interface PublisherService {
@@ -8,4 +9,5 @@ public interface PublisherService {
     public Publisher findOneById(Long id);
     public void delete (Publisher publisher);
     public Publisher findOneByIdWithBooks(Long id);
+    public Publisher findOneByName(String name);
 }

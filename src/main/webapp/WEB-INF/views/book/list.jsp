@@ -10,17 +10,52 @@
 <html>
 <head>
     <title>book list</title>
+    <style>
+        th {
+            text-align: right;
+            font-weight: bold;
+            padding-right: 15px;
+        }
+        table {
+            margin-left: 50px;
+            padding-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <h1>book list</h1>
-    <ul>
-        <c:forEach items="${books}" var="book">
-            <li><h3>${book.title}</h3>
-                <span>Wydawca: ${book.publisher.name}</span><br>
-                <span>Ocena: ${book.rating}/10</span><br>
-                <span>Opis: ${book.description}</span>
-            </li>
-        </c:forEach>
-    </ul>
+    <c:forEach items="${books}" var="book">
+    <table>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><h3>${book.title}</h3></td></tr>
+            <tr>
+                <th>Autorzy: </th>
+                <td>
+                        <c:forEach items="${book.authors}" var="author">
+                            ${author.firstName} ${author.lastName},
+                        </c:forEach>
+                </td>
+            </tr>
+            <tr>
+                <th>Wydawca: </th>
+                <td>${book.publisher.name}</td>
+            </tr>
+            <tr>
+                <th>Ocena: </th>
+                <td>
+                    <c:forEach begin="1" end="${book.rating}">
+                        <img src="https://i.imgur.com/VtqJRKf.png" width="15px" height="15px"/>
+                    </c:forEach>
+                </td>
+            </tr>
+            <tr>
+                <th>Opis: </th>
+                <td><em>${book.description}</em></td>
+            </tr>
+        </tbody>
+    </table>
+    </c:forEach>
 </body>
 </html>
