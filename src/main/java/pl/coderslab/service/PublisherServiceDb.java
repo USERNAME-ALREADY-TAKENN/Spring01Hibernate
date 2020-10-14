@@ -9,6 +9,7 @@ import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Primary
@@ -28,6 +29,11 @@ public class PublisherServiceDb implements PublisherService {
     @Override
     public Publisher findOneById(Long id) {
         return this.publisherDao.findOneById(id);
+    }
+
+    @Override
+    public List<Publisher> findAll() {
+        return publisherDao.getAll();
     }
 
     @Override

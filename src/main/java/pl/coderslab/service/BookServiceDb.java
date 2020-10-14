@@ -7,6 +7,7 @@ import pl.coderslab.dao.BookDao;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
+import pl.coderslab.repository.BookRepository;
 
 import java.util.List;
 
@@ -14,20 +15,24 @@ import java.util.List;
 @Primary
 public class BookServiceDb implements BookService {
     private BookDao bookDao;
+    private BookRepository bookRepository;
 
     @Autowired
-    public BookServiceDb(BookDao bookDao) {
+    public BookServiceDb(BookDao bookDao, BookRepository bookRepository) {
         this.bookDao = bookDao;
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public void save(Book book) {
-        this.bookDao.save(book);
+//        this.bookDao.save(book);
+        this.bookRepository.save(book);
     }
 
     @Override
     public Book findOneById(Long id) {
-        return this.bookDao.findOneById(id);
+//        return this.bookDao.findOneById(id);
+        return this.bookRepository.findById(id).orElseGet(null);
     }
 
     @Override

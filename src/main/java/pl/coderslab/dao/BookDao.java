@@ -33,7 +33,7 @@ public class BookDao {
     }
 
     public List<Book> findAll(){
-        Query query = this.em.createQuery("Select b from Book b join fetch b.publisher join fetch b.authors Order by b.title asc");
+        Query query = this.em.createQuery("Select b from Book b left join fetch b.publisher left join fetch b.authors Order by b.title asc");
         List<Book> books = query.getResultList();
         return books;
     }

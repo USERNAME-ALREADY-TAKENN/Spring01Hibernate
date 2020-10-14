@@ -20,7 +20,22 @@ public class Author {
     Long id;
     String firstName;
     String lastName;
-
     @ManyToMany(mappedBy = "authors")
-    private List<Book> books = new ArrayList<>();
+    List<Book> books = new ArrayList<>();
+
+    @Transient
+    String fullName;
+
+    public String getFullName() {
+        return firstName+" "+lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

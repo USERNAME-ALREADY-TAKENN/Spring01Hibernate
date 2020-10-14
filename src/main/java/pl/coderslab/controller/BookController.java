@@ -5,10 +5,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
@@ -28,32 +25,50 @@ public class BookController {
     private BookService bookService;
     private PublisherService publisherService;
     private AuthorService authorService;
-    private Faker faker;
+//    private Faker faker;
 
     @Autowired
     public BookController(BookService bookService, PublisherService publisherService, AuthorService authorService) {
         this.bookService = bookService;
         this.publisherService = publisherService;
         this.authorService = authorService;
-        this.faker = new Faker();
+//        this.faker = new Faker();
     }
-    @RequestMapping("/add")
-    @ResponseBody
-    public String saveBook() {
 
-        Publisher publisher = publisherService.findOneById(1L);
-
+    @GetMapping("/new")
+    public String bookForm(Model model) {
         Book book = new Book();
-        book.setTitle(this.faker.superhero().name());
-        Random random = new Random();
-        book.setRating(random.nextInt(10)+1);
-        book.setDescription(this.faker.lorem().fixedString(100)+"...");
-        book.setPublisher(publisher);
-
-        this.bookService.save(book);
-
-        return "Book saved at id: "+book.getId();
+        model.addAttribute("book", book);
+        return "book/form";
     }
+
+    @ModelAttribute("publishers")
+    public List<Publisher> publisherList() {
+        return publisherService.findAll();
+    }
+
+    @PostMapping("/save")
+    public String saveBook(Book book){
+        bookService.save(book);
+        return "redirect:/book";
+    }
+//    @RequestMapping("/add")
+//    @ResponseBody
+//    public String saveBook() {
+//
+//        Publisher publisher = publisherService.findOneById(1L);
+//
+//        Book book = new Book();
+//        book.setTitle(this.faker.superhero().name());
+//        Random random = new Random();
+//        book.setRating(random.nextInt(10)+1);
+//        book.setDescription(this.faker.lorem().fixedString(100)+"...");
+//        book.setPublisher(publisher);
+//
+//        this.bookService.save(book);
+//
+//        return "Book saved at id: "+book.getId();
+//    }
 
     @GetMapping()
     @Transactional

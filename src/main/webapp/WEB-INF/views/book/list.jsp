@@ -43,6 +43,10 @@
                 <td>${book.publisher.name}</td>
             </tr>
             <tr>
+                <th>Strony: </th>
+                <td>${book.pages}</td>
+            </tr>
+            <tr>
                 <th>Ocena: </th>
                 <td>
                     <c:forEach begin="1" end="${book.rating}">
