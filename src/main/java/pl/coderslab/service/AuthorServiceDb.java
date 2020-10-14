@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.dao.AuthorDao;
 import pl.coderslab.entity.Author;
 
+import java.util.List;
+
 @Service
 @Primary
 public class AuthorServiceDb implements AuthorService {
@@ -29,5 +31,10 @@ public class AuthorServiceDb implements AuthorService {
     @Override
     public void delete(Author author) {
         this.authorDao.delete(author);
+    }
+
+    @Override
+    public List<Author> findAll() {
+        return authorDao.getAll();
     }
 }

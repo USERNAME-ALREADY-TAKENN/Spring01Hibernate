@@ -33,7 +33,7 @@ public class BookDao {
     }
 
     public List<Book> findAll(){
-        Query query = this.em.createQuery("Select b from Book b left join fetch b.publisher left join fetch b.authors Order by b.title asc");
+        Query query = this.em.createQuery("Select distinct b from Book b left join fetch b.publisher left join fetch b.authors Order by b.title asc");
         List<Book> books = query.getResultList();
         return books;
     }
@@ -67,8 +67,12 @@ public class BookDao {
         List<Book> books = query.getResultList();
         return books;
     }
+
+    public Book findOneByIdWithAllData (Long id){
+        Query query = em.createQuery(
+                "Select b From Book b Join fetch b.publisher p Join fetch b.authors a where b.id = :id"
+        );
+        query.setParameter("id", id);
+        return (Book) query.getSingleResult();
+    }
 }
-//    public Publisher findOneByIdWithBooks(Long id) {
-//        Publisher publisher = publisherDao.findOneById(id);
-//        Hibernate.initialize(publisher.getBooks());
-//        return publisher;

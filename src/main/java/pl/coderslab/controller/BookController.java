@@ -5,6 +5,8 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Book;
@@ -15,6 +17,7 @@ import pl.coderslab.service.PublisherService;
 
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Random;
 
@@ -25,14 +28,27 @@ public class BookController {
     private BookService bookService;
     private PublisherService publisherService;
     private AuthorService authorService;
+    private Validator validator;
 //    private Faker faker;
 
     @Autowired
-    public BookController(BookService bookService, PublisherService publisherService, AuthorService authorService) {
+    public BookController(BookService bookService, PublisherService publisherService, AuthorService authorService,
+                          Validator validator) {
         this.bookService = bookService;
         this.publisherService = publisherService;
         this.authorService = authorService;
+        this.validator = validator;
 //        this.faker = new Faker();
+    }
+
+    @ModelAttribute("publishers")
+    public List<Publisher> publisherList() {
+        return publisherService.findAll();
+    }
+
+    @ModelAttribute("authors")
+    public List<Author> authorList(){
+        return authorService.findAll();
     }
 
     @GetMapping("/new")
@@ -42,16 +58,38 @@ public class BookController {
         return "book/form";
     }
 
-    @ModelAttribute("publishers")
-    public List<Publisher> publisherList() {
-        return publisherService.findAll();
-    }
-
     @PostMapping("/save")
-    public String saveBook(Book book){
+    public String saveBook(@Valid Book book, BindingResult validation){
+        if(validation.hasErrors()){
+            return "book/form";
+        }
+
         bookService.save(book);
         return "redirect:/book";
     }
+
+    @GetMapping("/edit/{id}")
+    public String bookForm(@PathVariable long id ,Model model){
+        Book book = bookService.findOneByIdWithAllData(id);
+        model.addAttribute("book", book);
+        return "book/form";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteBook(
+            @PathVariable long id,
+            Model model,
+            @RequestParam(required = false, defaultValue = "false") boolean accept
+    ){
+        Book book = bookService.findOneById(id);
+        if(!accept) {
+            model.addAttribute("book", book);
+            return "book/deletePrompt";
+        }
+        bookService.delete(book);
+        return "redirect:/book";
+    }
+
 //    @RequestMapping("/add")
 //    @ResponseBody
 //    public String saveBook() {
@@ -107,31 +145,4 @@ public class BookController {
     }
 
 
-
-
-//    @RequestMapping("/update/{id}")
-//    @ResponseBody
-//    public String updateBook(@PathVariable long id) {
-//        Book book = bookService.findOneById(id);
-//        book.setTitle("edited title");
-//        book.setDescription("edited lorem ipsum");
-//        book.setRating(10);
-//        bookService.save(book);
-//        return "zaaktualizowano: " + book.toString();
-//    }
-//
-//    @RequestMapping("/get/{id}")
-//    @ResponseBody
-//    @Transactional
-//    public String getBook(@PathVariable long id) {
-//        Book book = bookService.findOneById(id);
-//        return book.toString();
-//    }
-//    @RequestMapping("/delete/{id}")
-//    @ResponseBody
-//    public String deleteBook(@PathVariable long id) {
-//        Book book = bookService.findOneById(id);
-//        bookService.delete(book);
-//        return "removed: " + book.toString();
-//    }
 }

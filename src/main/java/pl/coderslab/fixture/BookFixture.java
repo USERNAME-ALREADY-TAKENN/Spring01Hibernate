@@ -36,6 +36,7 @@ public class BookFixture {
             book.setTitle(faker.book().title());
             book.setRating(random.nextInt(10)+1);
             book.setDescription(this.faker.lorem().fixedString(100)+"...");
+            book.setPages(this.faker.number().numberBetween(50,1000));
 
             long publisherId = (long) (random.nextInt(3)+1);
             Publisher publisher = publisherService.findOneById(publisherId);

@@ -20,6 +20,10 @@
             margin-left: 50px;
             padding-bottom: 15px;
         }
+        .title {
+            font-weight: bold;
+            font-size: large;
+        }
     </style>
 </head>
 <body>
@@ -29,13 +33,18 @@
         <tbody>
             <tr>
                 <td></td>
-                <td><h3>${book.title}</h3></td></tr>
+                <td>
+                    <span class="title">${book.title}</span>
+                    <a href="/book/edit/${book.id}">Edit</a>
+                    <a href="/book/delete/${book.id}">Delete</a>
+                </td>
+            </tr>
             <tr>
                 <th>Autorzy: </th>
                 <td>
-                        <c:forEach items="${book.authors}" var="author">
-                            ${author.firstName} ${author.lastName},
-                        </c:forEach>
+                    <c:forEach items="${book.authors}" var="author">
+                        ${author.firstName} ${author.lastName},
+                    </c:forEach>
                 </td>
             </tr>
             <tr>

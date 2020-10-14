@@ -69,4 +69,9 @@ public class BookServiceDb implements BookService {
     public Book findOneByName(String title) {
         return bookDao.findOneByName(title);
     }
+
+    @Override
+    public Book findOneByIdWithAllData(Long id) {
+        return this.bookDao.findOneByIdWithAllData(id);
+    }
 }
