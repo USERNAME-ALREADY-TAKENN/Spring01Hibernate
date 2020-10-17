@@ -68,6 +68,13 @@ public class BookDao {
         return books;
     }
 
+//    public Book findOneByIdWithAllData (Long id){
+//        Query query = this.em.createQuery(
+//                "Select b From Book b Join fetch b.publisher p Join fetch b.authors where b.id = :id"
+//        );
+//        query.setParameter("id", id);
+//        return (Book) query.getSingleResult();
+//    }
     public Book findOneByIdWithAllData (Long id){
         Query query = em.createQuery(
                 "Select b From Book b Join fetch b.publisher p Join fetch b.authors a where b.id = :id"
@@ -75,4 +82,9 @@ public class BookDao {
         query.setParameter("id", id);
         return (Book) query.getSingleResult();
     }
+
+
+//    Query query = this.em.createQuery("Select distinct b from Book b left join fetch b.publisher left join fetch b.authors Order by b.title asc");
+//    List<Book> books = query.getResultList();
+//        return books;
 }

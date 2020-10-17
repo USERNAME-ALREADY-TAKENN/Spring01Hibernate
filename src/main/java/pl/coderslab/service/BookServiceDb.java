@@ -10,6 +10,7 @@ import pl.coderslab.entity.Publisher;
 import pl.coderslab.repository.BookRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Primary
@@ -73,5 +74,9 @@ public class BookServiceDb implements BookService {
     @Override
     public Book findOneByIdWithAllData(Long id) {
         return this.bookDao.findOneByIdWithAllData(id);
+    }
+
+    public Set<Book> testRepo(){
+        return this.bookRepository.findAllWithAllData();
     }
 }

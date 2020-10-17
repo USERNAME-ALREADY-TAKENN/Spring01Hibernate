@@ -13,6 +13,7 @@ import pl.coderslab.entity.Book;
 import pl.coderslab.entity.Publisher;
 import pl.coderslab.service.AuthorService;
 import pl.coderslab.service.BookService;
+import pl.coderslab.service.BookServiceDb;
 import pl.coderslab.service.PublisherService;
 
 
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/book")
@@ -42,7 +44,7 @@ public class BookController {
     }
 
     @ModelAttribute("publishers")
-    public List<Publisher> publisherList() {
+    public List<Publisher> publisherList(){
         return publisherService.findAll();
     }
 
@@ -67,7 +69,13 @@ public class BookController {
         bookService.save(book);
         return "redirect:/book";
     }
-
+//    @Transactional
+//    @GetMapping("/edit/{id}")
+//    public String bookForm(@PathVariable long id ,Model model){
+//        Book book = bookService.findOneByIdWithAllData(id);
+//        model.addAttribute("book", book);
+//        return "book/form";
+//    }
     @GetMapping("/edit/{id}")
     public String bookForm(@PathVariable long id ,Model model){
         Book book = bookService.findOneByIdWithAllData(id);
@@ -116,6 +124,17 @@ public class BookController {
         model.addAttribute("books", bookList);
         return "book/list";
     }
+
+
+    @GetMapping("/test")
+    public String testBooks(Model model){
+        BookServiceDb bookServiceDb = (BookServiceDb) this.bookService;
+        Set<Book> bookList = bookServiceDb.testRepo();
+        model.addAttribute("books", bookList);
+        return "book/list";
+    }
+
+
     @GetMapping("/rating/{rating}")
     public String allBooks(Model model, @PathVariable int rating){
         List<Book> bookList = this.bookService.getRatingList(rating);
